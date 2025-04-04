@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d25c8570214fa244e83133bdcc31d484, type: 3}
+  m_Name: Ch1_HowAreYou_Lesson
+  m_EditorClassIdentifier: 
+  topicKey: Ch1_HowAreYou_Lesson
+  introLines: []
+  lessonQuestion: If I wanted to say ask how you are what do you think I might say?
+  responseOptions:
+  - <link=wrong>How are you?</link>
+  - "<link=correct>Skennenk\xF3: ken?</link>"
+  - <link=wrong>Nia:wen</link>
+  mohawkWord: "Skennenk\xF3: ken?"
+  englishWord: How are you?
+  wordAudio: {fileID: 8300000, guid: ab69e10fda561134b86ca25c5dd0356e, type: 3}
+  triggersAchievement: 0
+  achievementId: 

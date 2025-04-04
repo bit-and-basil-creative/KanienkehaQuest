@@ -1,11 +1,18 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private AudioSource audioSource; //reference to audio source component
+
+    [Header("Chapter Settings")]
+    [SerializeField] private TextMeshProUGUI chapterNumber;
+    [SerializeField] private TextMeshProUGUI chapterTitle;
+    [SerializeField] private Image chapterBackground;
+
     public static GameManager instance;
-    private int beadsCollected = 0;
-    private int requiredBeads = 12;
 
     void Awake()
     {
@@ -20,22 +27,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void AddBead()
+    private void Start()
     {
-        beadsCollected++;
-        if (beadsCollected >= requiredBeads)
+        if (audioSource != null)
         {
-            UnlockNextChapter();
+            audioSource.Play();
         }
-    }
-
-    private void UnlockNextChapter()
-    {
-        Debug.Log("All beads collected! Unlocking next chapter...");
-    }
-
-    public int GetBeadCount()
-    {
-        return beadsCollected;
     }
 }

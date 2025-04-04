@@ -10,37 +10,30 @@ using System.Text;
 public class ResponseHandler : MonoBehaviour
 {
     [Header("UI References")]
-    public GameObject nextButton;
-    public GameObject responseOptions; //container that holds all response text objects
-    public TextMeshProUGUI[] responseTexts; //array of responses
-    public TextMeshProUGUI dialogueText; //text box to show dialogue
-    public GameObject correctWordGroup; //container that holds the Play button and Correct Word
-    public TextMeshProUGUI correctWordText;
-    public Button playButton;
+    [SerializeField] private GameObject nextButton;
+    [SerializeField] private Button playButton;
+    [SerializeField] private GameObject responseOptions; //container that holds all response text objects
+    [SerializeField] private TextMeshProUGUI[] responseTexts; //array of responses
+    [SerializeField] private TextMeshProUGUI dialogueText; //text box to show dialogue
+    [SerializeField] private GameObject correctWordGroup; //container that holds the Play button and Correct Word
+    [SerializeField] private TextMeshProUGUI correctWordText;
+    [SerializeField] private WordBasketManager wordBasketManager;
+    [SerializeField] private GameObject achievementPanel;
 
     [Header("Audio")]
-    public AudioSource audioSource; //reference to audio source component
-    public AudioClip lastPlayedClip; //stores the last played audio clip to be replayed if needed
+    [SerializeField] private AudioSource audioSource; //reference to audio source component
+    [SerializeField] private AudioClip incorrectAnswerClip;
+    [SerializeField] private AudioClip correctAnswerClip;
+    private AudioClip lastPlayedClip; //stores the last played audio clip to be replayed if needed
 
     [Header("Script References")]
-    public BeadTracker beadTracker; //reference to bead tracker script
-    public DialogueManager dialogueManager; //reference to dialogue manager script
+    [SerializeField] private BeadTracker beadTracker; //reference to bead tracker script
+    [SerializeField] private DialogueManager dialogueManager; //reference to dialogue manager script
+    [SerializeField] private DialogueDatabase dialogueDatabase; //reference to the dialogue database
 
     [Header("State Tracking")]
     private string currentTopic; //stores current topic being handled
     private bool isAnswerCorrect = false; //bool to track if response is correct/incorrect
-
-    private Dictionary<string, string[]> responseOptionsData = new Dictionary<string, string[]>
-    {
-        //stores response choices for each lesson
-        //link tags indicate which answer is correct/wrong
-        //responseOptionsData is used in ShowResponses()
-
-        { "Ch1_Hello_Lesson", new string[] { "<link=correct>Shé:kon!</link>", "<link=wrong>Ohkwá:ri</link>", "<link=wrong>What's up?</link>" } },
-        { "Ch1_HowAreYou_Lesson", new string[] { "<link=wrong>How are you?</link>", "<link=correct>Skennenkó: ken?</link>", "<link=wrong>Nia:wen</link>" } },
-        { "Ch1_ThankYou_Lesson", new string[] { "<link=wrong>Okay</link>", "<link=wrong>Ohkwá:ri</link>", "<link=correct>Nia:wen</link>" } },
-        { "Ch1_Goodbye_Lesson", new string[] { "<link=correct>Ó:nen ki’wáhi</link>", "<link=wrong>Shé:kon!</link>", "<link=wrong>See ya!</link>" } },
-    };
 
     void Start()
     {
@@ -50,36 +43,29 @@ public class ResponseHandler : MonoBehaviour
     public void ShowResponses(string topic)
     {
         isAnswerCorrect = false;
+        currentTopic = topic;
 
-        currentTopic = topic; //store current question
+        nextButton.SetActive(false);
+        responseOptions.SetActive(true);
+        ClearResponses();
 
-        nextButton.SetActive(false); //hide Next button while responses are being shown
-        responseOptions.SetActive(true); //unhide response options container
+        DialogueEntry entry = System.Array.Find(dialogueDatabase.entries, e => e.topicKey == currentTopic);
 
-        ClearResponses(); //clear old responses to prevent overlap
-
-        if (responseOptionsData.ContainsKey(currentTopic))
+        if (entry != null && entry.responseOptions != null && entry.responseOptions.Length > 0)
         {
-            string[] choicesText = responseOptionsData[currentTopic];
+            string[] choicesText = entry.responseOptions;
 
             for (int i = 0; i < responseTexts.Length; i++)
             {
-                //loop through responseTexts array, populate the text fields and unhide the game objects
+                responseTexts[i].text = choicesText[i];
+                responseTexts[i].gameObject.SetActive(true);
 
-                responseTexts[i].text = choicesText[i]; //set response text inside each text object
-                responseTexts[i].gameObject.SetActive(true); //unhide all response options text objects
-
-                //assign click events to each response
-                int choiceIndex = i; //store local copy of index
-
-                //check if the response contains link = correct and assign each response accordingly
+                int choiceIndex = i;
                 string linkID = choicesText[i].Contains("<link=correct>") ? "correct" : "wrong";
 
-                //call ClickableText on each response
                 responseTexts[i].GetComponent<ClickableText>().Setup(this, choiceIndex, linkID);
             }
 
-            //display the question in the dialogue box
             dialogueText.text = GetQuestionText(currentTopic);
         }
     }
@@ -87,9 +73,21 @@ public class ResponseHandler : MonoBehaviour
     //method to process the player's answer
     public void HandleResponse(int choiceIndex, string linkID)
     {
-
         if (linkID == "correct") //if they click the correct response
         {
+            if (correctAnswerClip != null)
+            {
+                audioSource.PlayOneShot(correctAnswerClip);
+            }
+
+            //add word to WordBasket and load audio
+            DialogueEntry entry = System.Array.Find(dialogueDatabase.entries, e => e.topicKey == currentTopic);
+            if (entry != null)
+            {
+                wordBasketManager.AddWord(entry);
+                lastPlayedClip = entry.wordAudio;
+            }
+
             isAnswerCorrect = true; //mark response as correct
             responseOptions.SetActive(false); //hide response options
 
@@ -99,10 +97,6 @@ public class ResponseHandler : MonoBehaviour
             dialogueText.text = $"Yes! You are learning well. Now let's try to say it out loud:\n";
             correctWordGroup.gameObject.SetActive(true);
             correctWordText.text= responseTexts[choiceIndex].text;
-
-            //load the corresponding audio clip based on normalized string correctWord
-            string correctWord = NormalizeAudioClipName(responseTexts[choiceIndex].text);
-            lastPlayedClip = Resources.Load<AudioClip>($"Audio/{correctWord}");
 
             //add the play audio button
             if (lastPlayedClip != null) //if an audio clip is found
@@ -127,6 +121,11 @@ public class ResponseHandler : MonoBehaviour
                 GreyOutResponse(responseTexts[choiceIndex]);
                 responseTexts[choiceIndex].GetComponent<ClickableText>().enabled = false;
             }
+
+            if (incorrectAnswerClip != null)
+            {
+                audioSource.PlayOneShot(incorrectAnswerClip);
+            }
         }
     }
 
@@ -135,7 +134,7 @@ public class ResponseHandler : MonoBehaviour
     {
         if (correctWordGroup != null) //hide the correct word group and reset the text box
         {
-            correctWordGroup.gameObject.SetActive(true);
+            correctWordGroup.gameObject.SetActive(false);
             correctWordText.text = "";
         }
 
@@ -144,25 +143,19 @@ public class ResponseHandler : MonoBehaviour
             playButton.gameObject.SetActive(false); //hide the play button
         }
 
-        Debug.Log($"[NextButtonClicked] Button clicked. isAnswerCorrect: {isAnswerCorrect}");
-
         if (dialogueManager.IsIntroActive())
         {
-            Debug.Log("[NextButtonClicked] Still in an intro. Continuing dialogue.");
             dialogueManager.ShowDialogue();
         }
         else if (isAnswerCorrect)
         {
             {
                 dialogueText.text = ""; //clear the dialogue box
-
-                Debug.Log($"[NextButtonClicked] Answer is correct. Calling StartNextLesson()...");
                 dialogueManager.StartNextLesson(); //move to the next lesson
 
                 //check if there are more lessons remaining
                 if (!dialogueManager.HasMoreLessons())
                 {
-                    Debug.Log("[NextButtonClicked] No more lessons. Hiding next button.");
                     nextButton.SetActive(false);
                 }
             }
@@ -173,7 +166,8 @@ public class ResponseHandler : MonoBehaviour
 
     private string GetQuestionText(string topic)
     {
-        return dialogueManager.GetLessonQuestion(topic);
+        DialogueEntry entry = System.Array.Find(dialogueDatabase.entries, e => e.topicKey == currentTopic);
+        return entry != null ? entry.lessonQuestion : "";
     }
 
     public void ReplayAudio()
@@ -203,20 +197,5 @@ public class ResponseHandler : MonoBehaviour
     {
         string cleaned = Regex.Replace(text.text, "<.*?>", "");
         text.text = $"<color=#999999>{cleaned}</color>";
-    }
-
-    private string NormalizeAudioClipName(string input)
-    {
-        // Remove TMP formatting (e.g., <color>, <link>, etc.)
-        string cleanText = Regex.Replace(input, "<.*?>", "");
-
-        // Normalize and remove accents
-        cleanText = cleanText.Normalize(NormalizationForm.FormD); // Decomposes characters
-        cleanText = new string(cleanText.Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark).ToArray());
-
-        // Remove punctuation and special characters, keep only letters and numbers
-        cleanText = Regex.Replace(cleanText, @"[^a-zA-Z0-9]", "");
-
-        return cleanText;
     }
 }

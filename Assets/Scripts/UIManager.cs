@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    public GameObject mainMenu;
-    public GameObject settingsMenu;
+    [SerializeField] private GameObject mainMenu;
+    [SerializeField] private GameObject settingsMenu;
 
     public void ShowMainMenu()
     {

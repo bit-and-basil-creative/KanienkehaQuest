@@ -4,7 +4,7 @@ using TMPro;
 public class BeadTracker : MonoBehaviour
 {
     public static BeadTracker instance; // Singleton instance
-    public TextMeshProUGUI beadText;
+    [SerializeField] private TextMeshProUGUI beadText;
     private int beadsCollected = 0;
 
     void Awake()
@@ -41,7 +41,7 @@ public class BeadTracker : MonoBehaviour
     {
         if (beadText != null)
         {
-            beadText.text = "Beads: " + beadsCollected;
+            beadText.text = beadsCollected.ToString();
         }
         else
         {
