@@ -17,6 +17,7 @@ public class SettingsManager : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("[SettingsManager] Start called.");
         LoadSettings();
     }
 
@@ -48,7 +49,7 @@ public class SettingsManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    private void LoadSettings()
+    public void LoadSettings()
     {
         float defaultVolume = 0.7f;
 
@@ -56,12 +57,14 @@ public class SettingsManager : MonoBehaviour
         float sfx = PlayerPrefs.HasKey("SFXVolume") ? PlayerPrefs.GetFloat("SFXVolume") : defaultVolume;
         float music = PlayerPrefs.HasKey("MusicVolume") ? PlayerPrefs.GetFloat("MusicVolume") : defaultVolume;
 
-        // Set slider values first
+        Debug.Log($"[SettingsManager] Loaded - Master: {master}, SFX: {sfx}, Music: {music}");
+
+        //set slider values
         masterSlider.value = master;
         sfxSlider.value = sfx;
         musicSlider.value = music;
 
-        // Apply volume to AudioMixer
+        //apply volumes to AudioMixer
         SetMasterVolume();
         SetSFXVolume();
         SetMusicVolume();

@@ -6,6 +6,7 @@ public class BeadTracker : MonoBehaviour
     public static BeadTracker instance; // Singleton instance
     [SerializeField] private TextMeshProUGUI beadText;
     private int beadsCollected = 0;
+    private int beadCount = 0;
 
     void Awake()
     {
@@ -49,4 +50,8 @@ public class BeadTracker : MonoBehaviour
         }
     }
 
+    public int GetBeadCount()
+    {
+        return beadCount;
+    }
 }

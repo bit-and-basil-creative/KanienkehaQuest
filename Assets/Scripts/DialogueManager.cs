@@ -46,11 +46,26 @@ public class DialogueManager : MonoBehaviour
             }
         }
     }
-
     void Start()
     {
-        StartLesson("Ch1_Hello_Intro"); //start first lesson
+        int loadFromSave = PlayerPrefs.GetInt("ShouldLoadFromSave", 0);
+
+        if (loadFromSave == 1)
+        {
+            int savedLessonIndex = PlayerPrefs.GetInt("LessonIndex", 0);
+            lessonIndex = savedLessonIndex;
+            StartLesson(lessonOrder[lessonIndex]);
+
+            // Optional: Clear the flag so it doesn't re-trigger later
+            PlayerPrefs.SetInt("ShouldLoadFromSave", 0);
+        }
+        else
+        {
+            lessonIndex = 0;
+            StartLesson(lessonOrder[lessonIndex]);
+        }
     }
+
 
     //start an intro or lesson
     public void StartLesson(string topic)
@@ -156,7 +171,6 @@ public class DialogueManager : MonoBehaviour
         return "";
     }
 
-
     public bool HasMoreLessons()
     {
         return lessonIndex < lessonOrder.Count;
@@ -172,4 +186,9 @@ public class DialogueManager : MonoBehaviour
         int nextIndex = lessonOrder.IndexOf(currentTopic) + 1;
         return nextIndex < lessonOrder.Count ? lessonOrder[nextIndex] : null;
     }
+    public int GetCurrentLessonIndex()
+    {
+        return lessonIndex;
+    }
+
 }
