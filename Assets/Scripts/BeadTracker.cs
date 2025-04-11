@@ -5,7 +5,6 @@ public class BeadTracker : MonoBehaviour
 {
     public static BeadTracker instance; // Singleton instance
     [SerializeField] private TextMeshProUGUI beadText;
-    private int beadsCollected = 0;
     private int beadCount = 0;
 
     void Awake()
@@ -13,9 +12,8 @@ public class BeadTracker : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
-        else
+        else if (instance != this)
         {
             Destroy(gameObject);
         }
@@ -34,7 +32,7 @@ public class BeadTracker : MonoBehaviour
 
     public void AddBead()
     {
-        beadsCollected++;
+        beadCount++;
         UpdateBeadUI();
     }
 
@@ -42,7 +40,7 @@ public class BeadTracker : MonoBehaviour
     {
         if (beadText != null)
         {
-            beadText.text = beadsCollected.ToString();
+            beadText.text = beadCount.ToString();
         }
         else
         {
@@ -54,4 +52,17 @@ public class BeadTracker : MonoBehaviour
     {
         return beadCount;
     }
+
+    public void SetBeadCount(int count)
+    {
+        beadCount = count;
+        UpdateBeadUI();
+    }
+
+    public void AssignBeadText(TextMeshProUGUI newText)
+    {
+        beadText = newText;
+        UpdateBeadUI();
+    }
+
 }

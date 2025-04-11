@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d25c8570214fa244e83133bdcc31d484, type: 3}
+  m_Name: Ch3_White_Intro
+  m_EditorClassIdentifier: 
+  topicKey: Ch3_White_Intro
+  introLines:
+  - In winter, snow covers the earth and the world becomes still.
+  - In that stillness, we remember, and our Elders share their wisdom.
+  - Their words are gentle, like fresh snow on the ground.
+  lessonQuestion: 
+  responseOptions: []
+  mohawkWord: 
+  englishWord: 
+  wordAudio: {fileID: 0}
+  triggersAchievement: 0
+  achievementId: 

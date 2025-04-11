@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d25c8570214fa244e83133bdcc31d484, type: 3}
+  m_Name: Ch2_Kanienkeha_Lesson
+  m_EditorClassIdentifier: 
+  topicKey: Ch2_Kanienkeha_Lesson
+  introLines: []
+  lessonQuestion: What do we call ourselves - the People of the Flint?
+  responseOptions:
+  - "<link=wrong>Okw\xE1ho</link>"
+  - "<link=wrong>Sh\xE9:kon</link>"
+  - "<link=correct>Kanien\u2019keh\xE1:ka</link>"
+  mohawkWord: "Kanien\u2019keh\xE1:ka"
+  englishWord: People of the Flint
+  wordAudio: {fileID: 0}
+  triggersAchievement: 0
+  achievementId: 

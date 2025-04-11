@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PauseManager : MonoBehaviour
 {
+    [SerializeField] private AudioSource audioSource;
     [SerializeField] private GameObject pauseMenuUI;
     [SerializeField] private GameSaver gameSaver;
     [SerializeField] private GameObject saveConfirmationPanel;
@@ -25,6 +26,7 @@ public class PauseManager : MonoBehaviour
     {
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
+        audioSource.Pause();
         isPaused = true;
     }
 
@@ -32,6 +34,7 @@ public class PauseManager : MonoBehaviour
     {
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
+        audioSource.UnPause();
         isPaused = false;
     }
 
@@ -44,6 +47,7 @@ public class PauseManager : MonoBehaviour
     public void QuitToMainMenu()
     {
         Time.timeScale = 1f;
+        audioSource.Stop();
         SceneManager.LoadScene("MainMenu");
     }
 

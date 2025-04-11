@@ -10,12 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d25c8570214fa244e83133bdcc31d484, type: 3}
-  m_Name: Ch1_Goodbye_Intro
+  m_Name: Ch3_Red_Intro
   m_EditorClassIdentifier: 
-  topicKey: Ch1_Goodbye_Intro
+  topicKey: Ch3_Red_Intro
   introLines:
-  - "Parting is never final \u2014 we always hope to meet again."
-  - When we leave, we speak words of kindness and carry good thoughts with us.
-  - Let me show you how we say goodbye in our language.
+  - Inside the longhouse, stories pass from generation to generation.
+  - Stories stay warm in our hearts, like a fire that never goes out.
+  - Red is the colour of warmth, of love, and of caring for one another.
   lessonQuestion: 
   responseOptions: []
+  mohawkWord: 
+  englishWord: 
+  wordAudio: {fileID: 0}
+  triggersAchievement: 0
+  achievementId: 

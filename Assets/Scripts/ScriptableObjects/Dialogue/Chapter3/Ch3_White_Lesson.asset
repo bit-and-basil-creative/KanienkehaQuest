@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d25c8570214fa244e83133bdcc31d484, type: 3}
+  m_Name: Ch3_White_Lesson
+  m_EditorClassIdentifier: 
+  topicKey: Ch3_White_Lesson
+  introLines: []
+  lessonQuestion: Which word means white, the colour that carries the wisdom of our
+    Elders?
+  responseOptions:
+  - "<link=wrong>Skennenk\xF3: ken</link>"
+  - "<link=correct>Kar\xE0:ken</link>"
+  - "<link=wrong>\xD3:nen ki\u2019w\xE1hi</link>"
+  mohawkWord: "Kar\xE0:ken"
+  englishWord: White
+  wordAudio: {fileID: 8300000, guid: 0bdc408c6178cc7409df060f70362795, type: 3}
+  triggersAchievement: 0
+  achievementId: 

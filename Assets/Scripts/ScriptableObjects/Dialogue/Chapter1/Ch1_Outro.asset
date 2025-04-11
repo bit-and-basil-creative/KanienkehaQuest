@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d25c8570214fa244e83133bdcc31d484, type: 3}
+  m_Name: Ch1_Outro
+  m_EditorClassIdentifier: 
+  topicKey: Ch1_Outro
+  introLines:
+  - "You\u2019ve made a strong start. Speaking with respect helps us stay connected
+    to each other and to who we are. Come - walk with me to the forest. There, you\u2019ll
+    learn about our people and the clans that guide us."
+  lessonQuestion: 
+  responseOptions: []
+  mohawkWord: 
+  englishWord: 
+  wordAudio: {fileID: 0}
+  triggersAchievement: 1
+  achievementId: ch1_finished

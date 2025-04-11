@@ -8,10 +8,12 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dialogueText; //text box that stores dialogue
     [SerializeField] private GameObject nextButton;
     [SerializeField] private ResponseHandler responseHandler; //reference to ResponseHandler.cs
+    [SerializeField] private AudioSource audioSource;
 
     [Header("Dialogue Data")]
     [SerializeField] private DialogueDatabase dialogueDatabase;
     private Dictionary<string, DialogueEntry> dialogueLookup;
+    [SerializeField] private GameManager gameManager;
 
     [Header("Achievement Data")]
     [SerializeField] private AchievementManager achievementManager;
@@ -27,6 +29,27 @@ public class DialogueManager : MonoBehaviour
         "Ch1_Goodbye_Intro",
         "Ch1_Goodbye_Lesson",
         "Ch1_Outro",
+        "Ch2_Onkwehonwe_Intro",
+        "Ch2_Onkwehonwe_Lesson",
+        "Ch2_Kanienkeha_Intro",
+        "Ch2_Kanienkeha_Lesson",
+        "Ch2_Bear_Intro",
+        "Ch2_Bear_Lesson",
+        "Ch2_Turtle_Intro",
+        "Ch2_Turtle_Lesson",
+        "Ch2_Wolf_Intro",
+        "Ch2_Wolf_Lesson",
+        "Ch2_Outro",
+        "Ch3_Red_Intro",
+        "Ch3_Red_Lesson",
+        "Ch3_Black_Intro",
+        "Ch3_Black_Lesson",
+        "Ch3_Yellow_Intro",
+        "Ch3_Yellow_Lesson",
+        "Ch3_White_Intro",
+        "Ch3_White_Lesson",
+        "Ch3_Outro",
+        "Final_Scene"
     };
     
     private int lessonIndex = 0; //to keep track of which lesson the player is currently on
@@ -50,22 +73,50 @@ public class DialogueManager : MonoBehaviour
     {
         int loadFromSave = PlayerPrefs.GetInt("ShouldLoadFromSave", 0);
 
+        var beadText = GameObject.Find("BeadText")?.GetComponent<TextMeshProUGUI>();
+
+        if (BeadTracker.instance != null && beadText != null)
+        {
+            BeadTracker.instance.AssignBeadText(beadText);
+        }
+
         if (loadFromSave == 1)
         {
             int savedLessonIndex = PlayerPrefs.GetInt("LessonIndex", 0);
             lessonIndex = savedLessonIndex;
-            StartLesson(lessonOrder[lessonIndex]);
-
-            // Optional: Clear the flag so it doesn't re-trigger later
             PlayerPrefs.SetInt("ShouldLoadFromSave", 0);
+
+            //load saved word basket
+            FindObjectOfType<GameSaver>().LoadWordBasket();
+
+            //load saved bead count
+            int savedBeads = PlayerPrefs.GetInt("BeadCount", 0);
+            BeadTracker.instance.SetBeadCount(savedBeads);
         }
         else
         {
             lessonIndex = 0;
-            StartLesson(lessonOrder[lessonIndex]);
         }
+
+        if (gameManager != null)
+        {
+            gameManager.SetChapter(lessonOrder[lessonIndex].Split('_')[0]);
+        }
+
+        StartLesson(lessonOrder[lessonIndex]);
     }
 
+    public void StartLessonFromBeginning()
+{
+    lessonIndex = 0;
+    StartLesson(lessonOrder[lessonIndex]);
+}
+
+    public void ForceLoadLessonIndex(int index)
+    {
+        lessonIndex = index;
+        StartLesson(lessonOrder[lessonIndex]);
+    }
 
     //start an intro or lesson
     public void StartLesson(string topic)
@@ -96,6 +147,13 @@ public class DialogueManager : MonoBehaviour
             lessonIndex++;
             currentTopic = lessonOrder[lessonIndex];
             currentLine = 0;
+
+            string newChapterId = lessonOrder[lessonIndex].Split('_')[0];
+
+            if (gameManager != null)
+            {
+                gameManager.SetChapter(newChapterId);
+            }
 
             if (dialogueLookup[currentTopic].introLines != null && dialogueLookup[currentTopic].introLines.Length > 0)
             {
@@ -143,8 +201,30 @@ public class DialogueManager : MonoBehaviour
                 }
                 else
                 {
-                    dialogueText.text = "Great job! You have completed all lessons.";
-                    nextButton.SetActive(false);
+                    string finalKey = "Final_Scene";
+
+                    if (dialogueLookup.ContainsKey(finalKey))
+                    {
+                        currentTopic = finalKey;
+                        currentLine = 0;
+
+                        if (dialogueLookup[finalKey].introLines != null && dialogueLookup[finalKey].introLines.Length > 0)
+                        {
+                            isIntroSection = true;
+                        }
+                        else
+                        {
+                            isIntroSection = false;
+                        }
+
+                        ShowDialogue(); // recursively show final scene
+                    }
+                    else
+                    {
+                        // fallback just in case the FinalScene key is missing
+                        dialogueText.text = "Great job! You have completed all lessons.";
+                        nextButton.SetActive(false);
+                    }
                 }
             }
 
@@ -162,14 +242,6 @@ public class DialogueManager : MonoBehaviour
     }
 
     //-----------------HELPER METHODS-----------------//
-    public string GetLessonQuestion(string topic)
-    {
-        if (dialogueLookup.ContainsKey(topic))
-        {
-            return dialogueLookup[topic].lessonQuestion;
-        }
-        return "";
-    }
 
     public bool HasMoreLessons()
     {
@@ -186,9 +258,14 @@ public class DialogueManager : MonoBehaviour
         int nextIndex = lessonOrder.IndexOf(currentTopic) + 1;
         return nextIndex < lessonOrder.Count ? lessonOrder[nextIndex] : null;
     }
+
     public int GetCurrentLessonIndex()
     {
         return lessonIndex;
     }
 
+    public void ShowNextButton()
+    {
+        nextButton.SetActive(true);
+    }
 }

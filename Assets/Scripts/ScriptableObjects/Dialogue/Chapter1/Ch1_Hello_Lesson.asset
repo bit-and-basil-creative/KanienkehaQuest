@@ -16,9 +16,11 @@ MonoBehaviour:
   introLines: []
   lessonQuestion: What do you say when you meet someone for the first time?
   responseOptions:
-  - "<link=correct>Sh\xE9:kon!</link>"
+  - "<link=correct>Sh\xE9:kon</link>"
   - "<link=wrong>Ohkw\xE1:ri</link>"
   - <link=wrong>What's up?</link>
   mohawkWord: "Sh\xE9:kon"
   englishWord: Hello
   wordAudio: {fileID: 8300000, guid: 2e7409cbb30aa124ba8af901a21621fd, type: 3}
+  triggersAchievement: 0
+  achievementId: 

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd7f79c68ffd04448ee1803a9a08b30, type: 3}
+  m_Name: Ch3_Finished
+  m_EditorClassIdentifier: 
+  id: ch3_finished
+  title: The Path of Many Colors
+  description: You walked with kindness, courage, joy, and wisdom. These colours
+    now live within your story.
+  details: 'Completed Chapter 3: Visiting the Longhouse'
+  icon: {fileID: 21300000, guid: 85a79947272ec42469377b0003f5eb8d, type: 3}
+  isUnlocked: 0

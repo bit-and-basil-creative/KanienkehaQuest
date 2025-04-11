@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -12,7 +11,8 @@ public class AchievementManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI achieveDetails;
     [SerializeField] private Image achieveIcon;
     [SerializeField] private GameObject achievementPanel;
-    [SerializeField] private Button continueButton;
+    [SerializeField] private GameObject continueButton;
+    [SerializeField] private GameObject returnToMenuButton;
 
     [Header("Achievement Data")]
     [SerializeField] private AchievementDatabase achievementDatabase;
@@ -31,6 +31,17 @@ public class AchievementManager : MonoBehaviour
             achieveDescription.text = achievement.description;
             achieveDetails.text = achievement.details;
             achieveIcon.sprite = achievement.icon;
+
+            if (id == "bracelet_complete") // use your actual ID here
+            {
+                continueButton.SetActive(false);
+                returnToMenuButton.SetActive(true);
+            }
+            else
+            {
+                continueButton.SetActive(true);
+                returnToMenuButton.SetActive(false);
+            }
 
             achievementPanel.SetActive(true); //show the UI panel
         }
@@ -51,5 +62,41 @@ public class AchievementManager : MonoBehaviour
     public bool IsAchievementUnlocked(string id)
     {
         return PlayerPrefs.GetInt(id, 0) == 1;
+    }
+
+    public void ContinueJourneyClicked()
+    {
+        DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
+
+        if (dialogueManager != null)
+        {
+            string nextTopic = dialogueManager.GetNextLesson();
+
+            if (!string.IsNullOrEmpty(nextTopic))
+            {
+                string chapterId = nextTopic.StartsWith("Final") ? "Final_Scene" : nextTopic.Split('_')[0];
+
+                //start transition advance the lesson and chapter visuals
+                GameManager.instance.ShowTransitionScreen(chapterId, () =>
+                {
+                    //hide the achievement panel
+                    achievementPanel.SetActive(false);
+
+                    //lload the next lesson
+                    dialogueManager.ForceLoadLessonIndex(dialogueManager.GetCurrentLessonIndex() + 1);
+
+                    //set the new chapter visuals
+                    GameManager.instance.SetChapter(chapterId);
+
+                    //turn next button back on
+                    dialogueManager.ShowNextButton();
+                });
+            }
+        }
+    }
+
+    public void ReturnToMainMenu()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
     }
 }

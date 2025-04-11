@@ -10,17 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d25c8570214fa244e83133bdcc31d484, type: 3}
-  m_Name: Ch1_Outro
+  m_Name: Ch2_Kanienkeha_Intro
   m_EditorClassIdentifier: 
-  topicKey: Ch1_Outro
+  topicKey: Ch2_Kanienkeha_Intro
   introLines:
-  - "You\u2019ve made a strong start. Speaking with respect helps us stay connected
-    to each other and to who we are. Come - walk with me to the forest. There, you\u2019ll
-    learn about the clans that guide us."
+  - Mohawk is the name others gave us. But we carry a different name - one that comes
+    from our own people.
+  - "It\u2019s a name that reminds us of where we come from\u2026 of the flint that
+    sparked our story."
+  - "Let me share the name we\u2019ve carried for generations."
   lessonQuestion: 
   responseOptions: []
   mohawkWord: 
   englishWord: 
   wordAudio: {fileID: 0}
-  triggersAchievement: 1
-  achievementId: ch1_finished
+  triggersAchievement: 0
+  achievementId: 

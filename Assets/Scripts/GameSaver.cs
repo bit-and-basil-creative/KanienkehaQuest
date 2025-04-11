@@ -13,18 +13,18 @@ public class GameSaver : MonoBehaviour
 
     public void SaveGame()
     {
-        // Save bead count
-        int currentBeads = FindObjectOfType<BeadTracker>().GetBeadCount(); // Update if you're storing bead count elsewhere
+        //save bead count
+        int currentBeads = FindObjectOfType<BeadTracker>().GetBeadCount();
         PlayerPrefs.SetInt("BeadCount", currentBeads);
 
-        DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
+        //save lesson progress
         PlayerPrefs.SetInt("LessonIndex", dialogueManager.GetCurrentLessonIndex());
 
+        //save word basket
         SaveWordBasket();
 
+        //save preferences
         PlayerPrefs.Save();
-
-        Debug.Log("Game saved.");
     }
 
     public void LoadGame()
